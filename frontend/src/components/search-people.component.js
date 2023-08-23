@@ -27,7 +27,7 @@ export default function SearchPeople({ numPages = 3 }) {
 		if (process.env.NODE_ENV === "development") {
 			console.log("Dev environment");
 			return "http://localhost:5000/api";
-		} else if (process.NODE_ENV === "production") {
+		} else if (process.env.NODE_ENV === "production") {
 			console.log("Prod environment");
 			return "https://apollo-mockup-backend.onrender.com/api";
 		}
