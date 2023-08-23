@@ -6,8 +6,8 @@ export default function SearchPeople({ numPages = 3 }) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [personTitles, setPersonTitles] = useState([]);
-	const [orgDomains, setOrgDomains] = useState("");
+	// const [personTitles, setPersonTitles] = useState([]);
+	// const [orgDomains, setOrgDomains] = useState("");
 
 	// array of ints from 1 to numPages e.g. [1, 2, 3, . . ., numPages]
 	// default to 3 due to Apollo API limitations for free users
