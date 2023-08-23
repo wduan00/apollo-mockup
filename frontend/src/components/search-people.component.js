@@ -6,6 +6,8 @@ export default function SearchPeople({ numPages = 3 }) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [personTitles, setPersonTitles] = useState([]);
+	const [orgDomains, setOrgDomains] = useState("");
 
 	// array of ints from 1 to numPages e.g. [1, 2, 3, . . ., numPages]
 	// default to 3 due to Apollo API limitations for free users
@@ -37,7 +39,8 @@ export default function SearchPeople({ numPages = 3 }) {
 		axios
 			.get(backendEndpoint(), {
 				params: {
-					// person_titles: ["software engineer"],
+					person_titles: personTitles,
+					q_organization_domains: orgDomains,
 					page: currentPage,
 				},
 			})
@@ -66,34 +69,64 @@ export default function SearchPeople({ numPages = 3 }) {
 		// main table
 		<div>
 			<h3>Search People</h3>
-			<table className="table table-striped">
-				<thead className="table-light">
-					<tr>
-						<th scope="col">Name</th>
-						<th scope="col">Title</th>
-						<th scope="col">Company</th>
-						<th scope="col">Location</th>
-						<th scope="col">Email</th>
-					</tr>
-				</thead>
-				<tbody>
-					{data.people.map((p) => {
-						return (
-							<PersonRow
-								name={p.name ? p.name : "N/A"}
-								title={p.title ? p.title : "N/A"}
-								org_name={
-									p.employment_history[0].organization_name
-										? p.employment_history[0].organization_name
-										: "N/A"
-								}
-								location={p.city && p.state ? p.city + ", " + p.state : "N/A"}
-								email={p.email ? p.email : "N/A"}
-							/>
-						);
-					})}
-				</tbody>
-			</table>
+			<div className="row">
+				<div className="col-2 bg-light p-3 border">
+					<h4>Filters</h4>
+					<form>
+						<div class="form-group mb-3">
+							<label for="titleSearch">Employee titles:</label>
+							<input
+								class="form-control mb-1"
+								id="titleSearch"
+								placeholder="'software engineer'"
+							></input>
+							<input type="submit" value="Enter"></input>
+						</div>
+						<div class="form-group">
+							<label for="employerSearch">Employer domains:</label>
+							<input
+								class="form-control mb-1"
+								id="employerSearch"
+								placeholder="'google.com'"
+							></input>
+							<input type="submit" value="Enter"></input>
+						</div>
+					</form>
+				</div>
+				<div className="table-responsive col-10">
+					<table className="table table-striped">
+						<thead className="table-light">
+							<tr>
+								<th scope="col">Name</th>
+								<th scope="col">Title</th>
+								<th scope="col">Company</th>
+								<th scope="col">Location</th>
+								<th scope="col">Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{data.people.map((p) => {
+								return (
+									<PersonRow
+										name={p.name ? p.name : "N/A"}
+										title={p.title ? p.title : "N/A"}
+										org_name={
+											p.employment_history[0].organization_name
+												? p.employment_history[0].organization_name
+												: "N/A"
+										}
+										location={
+											p.city && p.state ? p.city + ", " + p.state : "N/A"
+										}
+										email={p.email ? p.email : "N/A"}
+									/>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
 			{/* page navbar */}
 			<nav>
 				<ul className="pagination justify-content-center">
