@@ -70,7 +70,7 @@ export default function SearchPeople({ numPages = 3 }) {
 		<div>
 			<h3>Search People</h3>
 			<div className="row">
-				<div className="col-2 bg-light p-3 border">
+				<div className="col-lg-2 col-xs-12 bg-light p-3 border">
 					<h4>Filters</h4>
 					<form>
 						<div class="form-group mb-3">
@@ -93,7 +93,7 @@ export default function SearchPeople({ numPages = 3 }) {
 						</div>
 					</form>
 				</div>
-				<div className="table-responsive col-10">
+				<div className="table-responsive col-lg-10 coll-xs-12">
 					<table className="table table-striped">
 						<thead className="table-light">
 							<tr>
