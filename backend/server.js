@@ -22,7 +22,7 @@ app.get("/api", async (req, res) => {
 		const response = await axios.post(apolloURI, {
 			api_key: process.env.APOLLO_API_KEY,
 			person_titles: req.query?.person_titles,
-			q_organizion_domains: req.query?.q_organizion_domains,
+			q_organization_domains: req.query?.q_organization_domains,
 			page: req.query?.page,
 		});
 		console.log("Apollo API call success");
