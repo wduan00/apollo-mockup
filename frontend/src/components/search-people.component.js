@@ -39,8 +39,8 @@ export default function SearchPeople({ numPages = 3 }) {
 		axios
 			.get(backendEndpoint(), {
 				params: {
-					person_titles: personTitles,
-					q_organization_domains: orgDomains,
+					// person_titles: personTitles,
+					// q_organization_domains: orgDomains,
 					page: currentPage,
 				},
 			})
