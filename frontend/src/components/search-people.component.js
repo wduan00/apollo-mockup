@@ -1,31 +1,64 @@
 import { useState, useEffect } from "react";
-import PersonRow from "./person-row.component";
 import axios from "axios";
+import PersonRow from "./person-row.component";
 
-// const data = axios.get("http://localhost:5000/api/");
+export default function SearchPeople({ numPages = 3 }) {
+	const [data, setData] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [currentPage, setCurrentPage] = useState(1);
 
-export default function SearchPeople() {
-	const [data, setData] = useState(null);
+	// array of ints from 1 to numPages e.g. [1, 2, 3, . . ., numPages]
+	// default to 3 due to Apollo API limitations for free users
+	const pageNumbers = Array.from(Array(numPages), (_, i) => i + 1);
 
+	const nextPage = () => {
+		if (currentPage !== numPages) {
+			setCurrentPage(currentPage + 1);
+		}
+	};
+
+	const prevPage = () => {
+		if (currentPage !== 1) {
+			setCurrentPage(currentPage - 1);
+		}
+	};
+
+	// render table with data from Apollo API on initial load and page change
 	useEffect(() => {
 		axios
-			.get("http://localhost:5000/api")
+			.get("http://localhost:5000/api", {
+				params: {
+					// person_titles: ["software engineer"],
+					page: currentPage,
+				},
+			})
 			.then((response) => {
 				setData(response.data);
+				setLoading(false);
 				console.log(response.data);
 			})
 			.catch((error) => console.log(error));
-	}, []);
+	}, [currentPage]);
 
-	if (!data) {
-		return <div>Loading...</div>;
+	// basic loading screen while useEffect() hook is running
+	if (loading) {
+		return (
+			<div>
+				<h3>Search People</h3>
+				<table className="table table-striped">
+					<thead className="table-light"></thead>
+				</table>
+				<div>Loading...</div>
+			</div>
+		);
 	}
 
 	return (
+		// main table
 		<div>
-			<h3>Search People:</h3>
-			<table class="table">
-				<thead className="thead-light">
+			<h3>Search People</h3>
+			<table className="table table-striped">
+				<thead className="table-light">
 					<tr>
 						<th scope="col">Name</th>
 						<th scope="col">Title</th>
@@ -38,18 +71,65 @@ export default function SearchPeople() {
 					{data.people.map((p) => {
 						return (
 							<PersonRow
-								name={p.name}
-								title={p.title}
-								org_name={p.employment_history[0].organization_name}
-								city={p.city}
-								state={p.state}
-								email={p.email}
+								name={p.name ? p.name : "N/A"}
+								title={p.title ? p.title : "N/A"}
+								org_name={
+									p.employment_history[0].organization_name
+										? p.employment_history[0].organization_name
+										: "N/A"
+								}
+								location={p.city && p.state ? p.city + ", " + p.state : "N/A"}
+								email={p.email ? p.email : "N/A"}
 							/>
 						);
 					})}
-					{/* <td>{data.people["name"]}</td> */}
 				</tbody>
 			</table>
+			{/* page navbar */}
+			<nav>
+				<ul className="pagination justify-content-center">
+					<li className="page-item">
+						<a
+							className="page-link"
+							href="/#"
+							aria-label="Previous"
+							onClick={prevPage}
+						>
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					{pageNumbers.map((pageNum) => {
+						return (
+							<li
+								key={pageNum}
+								className={`page-item ${
+									currentPage === pageNum ? "active" : ""
+								}`}
+							>
+								<a
+									className="page-link"
+									href="/#"
+									onClick={() => {
+										setCurrentPage(pageNum);
+									}}
+								>
+									{pageNum}
+								</a>
+							</li>
+						);
+					})}
+					<li className="page-item">
+						<a
+							className="page-link"
+							href="/#"
+							aria-label="Next"
+							onClick={nextPage}
+						>
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	);
 }

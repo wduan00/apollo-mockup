@@ -15,11 +15,6 @@ export default class Navbar extends Component {
 								Search People
 							</Link>
 						</li>
-						<li className="navbar-item">
-							<Link to="/savedlists" className="nav-link">
-								Saved Lists
-							</Link>
-						</li>
 					</ul>
 				</div>
 			</nav>
