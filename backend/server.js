@@ -14,7 +14,6 @@ app.use(express.json());
 
 app.listen(port, () => {
 	console.log(`Apollo app is running on port ${port}`);
-	console.log(apolloURI);
 });
 
 // route handling
