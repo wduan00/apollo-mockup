@@ -20,7 +20,7 @@ app.listen(port, () => {
 app.get("/api", async (req, res) => {
 	try {
 		const response = await axios.post(apolloURI, {
-			api_key: process.env.APOLLO_API_KEY,
+			api_key: env.APOLLO_API_KEY,
 			person_titles: req.query?.person_titles,
 			q_organizion_domains: req.query?.q_organizion_domains,
 			page: req.query?.page,
