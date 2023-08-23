@@ -1,46 +1,32 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PersonRow from "./person-row.component";
+import FilterBar from "./filter-bar.component";
+import PageNav from "./page-nav.component";
 
-export default function SearchPeople({ numPages = 3 }) {
+export default function SearchPeople() {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
-	// const [personTitles, setPersonTitles] = useState([]);
-	// const [orgDomains, setOrgDomains] = useState("");
-
-	// array of ints from 1 to numPages e.g. [1, 2, 3, . . ., numPages]
-	// default to 3 due to Apollo API limitations for free users
-	const pageNumbers = Array.from(Array(numPages), (_, i) => i + 1);
-
-	const nextPage = () => {
-		if (currentPage !== numPages) {
-			setCurrentPage(currentPage + 1);
-		}
-	};
-
-	const prevPage = () => {
-		if (currentPage !== 1) {
-			setCurrentPage(currentPage - 1);
-		}
-	};
+	const [personTitles, setPersonTitles] = useState([]);
+	const [orgDomains, setOrgDomains] = useState("");
 
 	const backendEndpoint = () => {
 		if (process.env.NODE_ENV === "development") {
 			console.log("Dev environment");
 			return "http://localhost:5000/api";
 		} else if (process.env.NODE_ENV === "production") {
-			console.log("Prod environment");
 			return "https://apollo-mockup-backend.onrender.com/api";
 		}
 	};
+
 	// render table with data from Apollo API on initial load and page change
 	useEffect(() => {
 		axios
 			.get(backendEndpoint(), {
 				params: {
-					// person_titles: personTitles,
-					// q_organization_domains: orgDomains,
+					person_titles: personTitles,
+					q_organization_domains: orgDomains,
 					page: currentPage,
 				},
 			})
@@ -50,7 +36,7 @@ export default function SearchPeople({ numPages = 3 }) {
 				console.log(response.data);
 			})
 			.catch((error) => console.log(error));
-	}, [currentPage]);
+	}, [personTitles, orgDomains, currentPage]);
 
 	// basic loading screen while useEffect() hook is running
 	if (loading) {
@@ -70,29 +56,12 @@ export default function SearchPeople({ numPages = 3 }) {
 		<div>
 			<h3>Search People</h3>
 			<div className="row">
-				<div className="col-lg-2 col-xs-12 bg-light p-3 border">
-					<h4>Filters</h4>
-					<form>
-						<div class="form-group mb-3">
-							<label for="titleSearch">Employee titles:</label>
-							<input
-								class="form-control mb-1"
-								id="titleSearch"
-								placeholder="'software engineer'"
-							></input>
-							<input type="submit" value="Enter"></input>
-						</div>
-						<div class="form-group">
-							<label for="employerSearch">Employer domains:</label>
-							<input
-								class="form-control mb-1"
-								id="employerSearch"
-								placeholder="'google.com'"
-							></input>
-							<input type="submit" value="Enter"></input>
-						</div>
-					</form>
-				</div>
+				<FilterBar
+					titleChanger={setPersonTitles}
+					employerChanger={setOrgDomains}
+					personTitles={personTitles}
+					orgDomains={orgDomains}
+				></FilterBar>
 				<div className="table-responsive col-lg-10 coll-xs-12">
 					<table className="table table-striped">
 						<thead className="table-light">
@@ -128,50 +97,11 @@ export default function SearchPeople({ numPages = 3 }) {
 			</div>
 
 			{/* page navbar */}
-			<nav>
-				<ul className="pagination justify-content-center">
-					<li className="page-item">
-						<a
-							className="page-link"
-							href="/#"
-							aria-label="Previous"
-							onClick={prevPage}
-						>
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					{pageNumbers.map((pageNum) => {
-						return (
-							<li
-								key={pageNum}
-								className={`page-item ${
-									currentPage === pageNum ? "active" : ""
-								}`}
-							>
-								<a
-									className="page-link"
-									href="/#"
-									onClick={() => {
-										setCurrentPage(pageNum);
-									}}
-								>
-									{pageNum}
-								</a>
-							</li>
-						);
-					})}
-					<li className="page-item">
-						<a
-							className="page-link"
-							href="/#"
-							aria-label="Next"
-							onClick={nextPage}
-						>
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+			<PageNav
+				currentPage={currentPage}
+				setCurrentPage={setCurrentPage}
+				numPages={3}
+			></PageNav>
 		</div>
 	);
 }
