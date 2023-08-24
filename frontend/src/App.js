@@ -8,13 +8,11 @@ import SearchPeople from "./components/search-people.component";
 export default function App() {
 	return (
 		<Router>
-			<div className="container">
-				<Navbar />
-				<br />
-				<Routes>
-					<Route path="/" element={<SearchPeople />} />
-				</Routes>
-			</div>
+			<Navbar />
+			<br />
+			<Routes>
+				<Route path="/" element={<SearchPeople />} />
+			</Routes>
 		</Router>
 	);
 }

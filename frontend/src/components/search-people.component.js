@@ -41,11 +41,13 @@ export default function SearchPeople() {
 	// basic loading screen while useEffect() hook is running
 	if (loading) {
 		return (
-			<div>
+			<div className="container-fluid col-11">
 				<h3>Search People</h3>
-				<table className="table table-striped">
-					<thead className="table-light"></thead>
-				</table>
+				<div className="table-responsive col-lg-10 col-xs-12">
+					<table className="table table-striped">
+						<thead className="table-light"></thead>
+					</table>
+				</div>
 				<div>Loading...</div>
 			</div>
 		);
@@ -53,16 +55,17 @@ export default function SearchPeople() {
 
 	return (
 		// main table
-		<div>
+		<div className="container-fluid col-11">
 			<h3>Search People</h3>
 			<div className="row">
 				<FilterBar
-					titleChanger={setPersonTitles}
-					employerChanger={setOrgDomains}
+					setPersonTitles={setPersonTitles}
+					setOrgDomains={setOrgDomains}
 					personTitles={personTitles}
 					orgDomains={orgDomains}
+					setCurrentPage={setCurrentPage}
 				></FilterBar>
-				<div className="table-responsive col-lg-10 coll-xs-12">
+				<div className="table-responsive col-lg-10 col-xs-12">
 					<table className="table table-striped">
 						<thead className="table-light">
 							<tr>
@@ -96,7 +99,7 @@ export default function SearchPeople() {
 				</div>
 			</div>
 
-			{/* page navbar */}
+			{/* pagination navbar */}
 			<PageNav
 				currentPage={currentPage}
 				setCurrentPage={setCurrentPage}

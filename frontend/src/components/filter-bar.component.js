@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 export default function FilterBar({
-	titleChanger,
-	employerChanger,
+	setPersonTitles,
+	setOrgDomains,
 	personTitles,
 	orgDomains,
+	setCurrentPage,
 }) {
 	const [personTitle, setPersonTitle] = useState("");
 	const [orgDomain, setOrgDomain] = useState(""); // local to filter bar, this is just what is shown while typing
@@ -28,7 +29,7 @@ export default function FilterBar({
 			!personTitles.includes(e.target.titleSearch.value)
 		) {
 			const newTitles = personTitles.concat([e.target.titleSearch.value]);
-			titleChanger(newTitles);
+			setPersonTitles(newTitles);
 			console.log("New title arr: ", newTitles);
 		}
 		if (
@@ -38,9 +39,18 @@ export default function FilterBar({
 			const newOrgString = orgDomains
 				? orgDomains + "\n" + e.target.employerSearch.value
 				: e.target.employerSearch.value;
-			employerChanger(newOrgString);
+			setOrgDomains(newOrgString);
 			console.log("New employer str: ", newOrgString);
 		}
+	}
+
+	function resetFilters(e) {
+		e.preventDefault();
+		setPersonTitle("");
+		setOrgDomain("");
+		setPersonTitles([]);
+		setOrgDomains("");
+		setCurrentPage(1);
 	}
 
 	return (
@@ -58,7 +68,7 @@ export default function FilterBar({
 					></input>
 					<input type="submit" value="Enter"></input>
 				</div>
-				<div className="form-group">
+				<div className="form-group mb-3">
 					<label for="employerSearch">Company domains:</label>
 					<input
 						className="form-control mb-1"
@@ -69,7 +79,9 @@ export default function FilterBar({
 					></input>
 					<input type="submit" value="Enter"></input>
 				</div>
-				<button type="reset" value="Reset"></button>
+				<div className="form-group justify-content-right">
+					<input type="reset" value="Reset All" onClick={resetFilters}></input>
+				</div>
 			</form>
 		</div>
 	);
