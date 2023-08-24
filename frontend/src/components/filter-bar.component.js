@@ -67,7 +67,7 @@ export default function FilterBar({
 						className="form-control mb-1"
 						id="titleSearch"
 						value={personTitle}
-						placeholder="'software engineer'"
+						placeholder="e.g. software engineer"
 						onChange={handleJobTitleChange}
 					></input>
 					<input type="submit" value="Enter"></input>
@@ -78,7 +78,7 @@ export default function FilterBar({
 						className="form-control mb-1"
 						id="employerSearch"
 						value={orgDomain}
-						placeholder="'google.com'"
+						placeholder="e.g. google.com"
 						onChange={handleEmployerChange}
 					></input>
 					<input type="submit" value="Enter"></input>
