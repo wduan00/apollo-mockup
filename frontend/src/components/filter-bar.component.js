@@ -9,8 +9,9 @@ export default function FilterBar({
 }) {
 	const [personTitle, setPersonTitle] = useState("");
 	const [orgDomain, setOrgDomain] = useState(""); // local to filter bar, this is just what is shown while typing
+	const [currFilters, setCurrFilters] = useState([]);
 
-	// rerender screen to show what is being typed
+	// handlers to rerender screen to show what is being typed
 	function handleJobTitleChange(e) {
 		e.preventDefault();
 		setPersonTitle(e.target.value);
@@ -22,7 +23,7 @@ export default function FilterBar({
 	}
 
 	// use setPersonTitles function passed from parent, which will trigger rerender of main table
-	function handleJobTitleSubmit(e) {
+	function handleFilterSubmit(e) {
 		e.preventDefault();
 		if (
 			e.target.titleSearch.value &&
@@ -30,7 +31,8 @@ export default function FilterBar({
 		) {
 			const newTitles = personTitles.concat([e.target.titleSearch.value]);
 			setPersonTitles(newTitles);
-			console.log("New title arr: ", newTitles);
+			setCurrFilters(currFilters.concat([e.target.titleSearch.value]));
+			setPersonTitle("");
 		}
 		if (
 			e.target.employerSearch.value &&
@@ -40,7 +42,8 @@ export default function FilterBar({
 				? orgDomains + "\n" + e.target.employerSearch.value
 				: e.target.employerSearch.value;
 			setOrgDomains(newOrgString);
-			console.log("New employer str: ", newOrgString);
+			setCurrFilters(currFilters.concat([e.target.employerSearch.value]));
+			setOrgDomain("");
 		}
 	}
 
@@ -51,12 +54,13 @@ export default function FilterBar({
 		setPersonTitles([]);
 		setOrgDomains("");
 		setCurrentPage(1);
+		setCurrFilters([]);
 	}
 
 	return (
 		<div className="col-lg-2 col-xs-12 bg-light p-3 border">
 			<h4>Filters</h4>
-			<form onSubmit={handleJobTitleSubmit}>
+			<form onSubmit={handleFilterSubmit}>
 				<div className="form-group mb-3">
 					<label for="titleSearch">Job titles:</label>
 					<input
@@ -79,10 +83,18 @@ export default function FilterBar({
 					></input>
 					<input type="submit" value="Enter"></input>
 				</div>
-				<div className="form-group justify-content-right">
-					<input type="reset" value="Reset All" onClick={resetFilters}></input>
-				</div>
 			</form>
+			<div className="mt-3 mb-1">
+				<h5>Applied Filters:</h5>
+				<ul className="list-group">
+					{currFilters.map((f) => {
+						return <li className="list-group-item">{f}</li>;
+					})}
+				</ul>
+			</div>
+			<div className="form-group justify-content-right">
+				<input type="reset" value="Reset All" onClick={resetFilters}></input>
+			</div>
 		</div>
 	);
 }

@@ -38,7 +38,7 @@ export default function SearchPeople() {
 			.catch((error) => console.log(error));
 	}, [personTitles, orgDomains, currentPage]);
 
-	// basic loading screen while useEffect() hook is running
+	// basic loading screen while useEffect() hook is still running
 	if (loading) {
 		return (
 			<div className="container-fluid col-11">
@@ -54,7 +54,6 @@ export default function SearchPeople() {
 	}
 
 	return (
-		// main table
 		<div className="container-fluid col-11">
 			<h3>Search People</h3>
 			<div className="row">
@@ -98,8 +97,6 @@ export default function SearchPeople() {
 					</table>
 				</div>
 			</div>
-
-			{/* pagination navbar */}
 			<PageNav
 				currentPage={currentPage}
 				setCurrentPage={setCurrentPage}
