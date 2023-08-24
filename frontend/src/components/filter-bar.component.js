@@ -9,7 +9,8 @@ export default function FilterBar({
 }) {
 	const [personTitle, setPersonTitle] = useState("");
 	const [orgDomain, setOrgDomain] = useState(""); // local to filter bar, this is just what is shown while typing
-	const [currFilters, setCurrFilters] = useState([]);
+	const [currTitleFilters, setCurrTitleFilters] = useState([]);
+	const [currOrgFilters, setCurrOrgFilters] = useState([]);
 
 	// handlers to rerender screen to show what is being typed
 	function handleJobTitleChange(e) {
@@ -31,8 +32,11 @@ export default function FilterBar({
 		) {
 			const newTitles = personTitles.concat([e.target.titleSearch.value]);
 			setPersonTitles(newTitles);
-			setCurrFilters(currFilters.concat([e.target.titleSearch.value]));
+			setCurrTitleFilters(
+				currTitleFilters.concat([e.target.titleSearch.value])
+			);
 			setPersonTitle("");
+			setCurrentPage(1);
 		}
 		if (
 			e.target.employerSearch.value &&
@@ -42,8 +46,9 @@ export default function FilterBar({
 				? orgDomains + "\n" + e.target.employerSearch.value
 				: e.target.employerSearch.value;
 			setOrgDomains(newOrgString);
-			setCurrFilters(currFilters.concat([e.target.employerSearch.value]));
+			setCurrOrgFilters(currOrgFilters.concat([e.target.employerSearch.value]));
 			setOrgDomain("");
+			setCurrentPage(1);
 		}
 	}
 
@@ -54,7 +59,8 @@ export default function FilterBar({
 		setPersonTitles([]);
 		setOrgDomains("");
 		setCurrentPage(1);
-		setCurrFilters([]);
+		setCurrTitleFilters([]);
+		setCurrOrgFilters([]);
 	}
 
 	return (
@@ -62,7 +68,7 @@ export default function FilterBar({
 			<h4>Filters</h4>
 			<form onSubmit={handleFilterSubmit}>
 				<div className="form-group mb-3">
-					<label for="titleSearch">Job titles:</label>
+					<label for="titleSearch">Title:</label>
 					<input
 						className="form-control mb-1"
 						id="titleSearch"
@@ -73,7 +79,7 @@ export default function FilterBar({
 					<input type="submit" value="Enter"></input>
 				</div>
 				<div className="form-group mb-3">
-					<label for="employerSearch">Company domains:</label>
+					<label for="employerSearch">Company domain:</label>
 					<input
 						className="form-control mb-1"
 						id="employerSearch"
@@ -85,9 +91,16 @@ export default function FilterBar({
 				</div>
 			</form>
 			<div className="mt-3 mb-1">
-				<h5>Applied Filters:</h5>
-				<ul className="list-group">
-					{currFilters.map((f) => {
+				<h5>Applied Filters</h5>
+				<h6>Titles:</h6>
+				<ul className="list-group mb-3">
+					{currTitleFilters.map((f) => {
+						return <li className="list-group-item">{f}</li>;
+					})}
+				</ul>
+				<h6>Company domains:</h6>
+				<ul className="list-group mb-3">
+					{currOrgFilters.map((f) => {
 						return <li className="list-group-item">{f}</li>;
 					})}
 				</ul>
