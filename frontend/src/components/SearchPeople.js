@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PersonRow from "./person-row.component";
-import FilterBar from "./filter-bar.component";
-import PageNav from "./page-nav.component";
+import PersonRow from "./PersonRow";
+import FilterBar from "./FilterBar";
+import PageNav from "./PageNav";
 
 export default function SearchPeople() {
 	const [data, setData] = useState([]);
