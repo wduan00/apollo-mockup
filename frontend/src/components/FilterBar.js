@@ -50,22 +50,21 @@ export default function FilterBar({
 	// use setPersonTitles function passed from parent, which will trigger rerender of main table
 	function handleFilterSubmit(e) {
 		e.preventDefault();
+		// handle title filters
 		if (
 			e.target.titleSearch.value &&
 			!personTitles.includes(e.target.titleSearch.value)
 		) {
 			const newTitles = personTitles.concat([e.target.titleSearch.value]);
 			setPersonTitles(newTitles);
-			setCurrTitleFilters(
-				// currTitleFilters.concat([e.target.titleSearch.value])
-				newTitles
-			);
+			setCurrTitleFilters(newTitles);
 			setAllOtherFilters({
 				titles: newTitles,
 			});
 			setPersonTitle("");
 			setCurrentPage(1);
 		}
+		// handle company filters
 		if (
 			e.target.employerSearch.value &&
 			!orgDomains.includes(e.target.employerSearch.value)
@@ -84,7 +83,6 @@ export default function FilterBar({
 	// Applies filters that correspond to the selected filter list
 	function handleListChange(e) {
 		setSelectedList(e.target.value);
-		setCurrOrgFilters([]);
 		if (e.target.value === "Select...") {
 			setOrgDomains("");
 			setCurrOrgFilters([]);
@@ -94,14 +92,19 @@ export default function FilterBar({
 		listData.forEach((f) => {
 			if (f.name === e.target.value) {
 				if (f.companies.length !== 0) {
-					const companyStr = f.companies[0];
+					let companyStr = "";
+					let orgList = [];
+					console.log("Filter companies: ", f.companies);
 					f.companies.forEach((c) => {
-						companyStr.concat("\n" + c);
-						setCurrOrgFilters(currOrgFilters.concat([c]));
+						companyStr = companyStr.concat("\n", c);
+						orgList.push(c);
 					});
 					setOrgDomains(companyStr);
+					setCurrOrgFilters(orgList);
+					console.log("Currently displayed orgs: ", companyStr);
 				} else {
 					setOrgDomains("");
+					setCurrOrgFilters([]);
 				}
 				setPersonTitles(f.all_other_filters.titles);
 				setCurrTitleFilters(f.all_other_filters.titles);
@@ -130,6 +133,8 @@ export default function FilterBar({
 			])
 		);
 		setListName("");
+		setAllOtherFilters({ titles: [] });
+		setCompanies([]);
 	}
 
 	function handleClearLists(e) {
