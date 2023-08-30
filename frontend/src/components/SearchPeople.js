@@ -11,19 +11,10 @@ export default function SearchPeople() {
 	const [personTitles, setPersonTitles] = useState([]);
 	const [orgDomains, setOrgDomains] = useState("");
 
-	const backendEndpoint = () => {
-		if (process.env.NODE_ENV === "development") {
-			console.log("Dev environment");
-			return "http://localhost:5000/api";
-		} else if (process.env.NODE_ENV === "production") {
-			return "https://apollo-mockup-backend.onrender.com/api";
-		}
-	};
-
 	// render table with data from Apollo API on initial load and page change
 	useEffect(() => {
 		axios
-			.get(backendEndpoint(), {
+			.get("https://apollo-mockup-backend.onrender.com/api", {
 				params: {
 					person_titles: personTitles,
 					q_organization_domains: orgDomains,
