@@ -112,12 +112,21 @@ export default function FilterBar({
 		});
 	}
 
+	const BACKEND_SEARCH_ENDPOINT = () => {
+		if (process.env.NODE_ENV === "development") {
+			console.log("Dev environment");
+			return "http://localhost:5000/searches";
+		} else if (process.env.NODE_ENV === "production") {
+			return "https://apollo-mockup-backend.onrender.com/searches";
+		}
+	};
+
 	// POSTs current filters and name to save list
 	function handleSaveSearch(e) {
 		e.preventDefault();
 		console.log("post to backend triggered");
 		axios
-			.post("http://localhost:5000/searches", {
+			.post(BACKEND_SEARCH_ENDPOINT, {
 				name: listName,
 				all_other_filters: allOtherFilters,
 				companies: companies,
