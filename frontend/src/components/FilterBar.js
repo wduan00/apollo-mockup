@@ -28,7 +28,7 @@ export default function FilterBar({
 	// GET saved filter lists from the backend
 	useEffect(() => {
 		axios
-			.get("http://localhost:5000/searches")
+			.get("https://apollo-mockup-backend.onrender.com/searches")
 			.then((response) => {
 				setListData(response.data.filterList);
 				console.log("GET request sent");
@@ -140,7 +140,7 @@ export default function FilterBar({
 	function handleClearLists(e) {
 		e.preventDefault();
 		axios
-			.delete("http://localhost:5000/searches")
+			.delete("https://apollo-mockup-backend.onrender.com/searches")
 			.catch((error) => console.log("Error: ", error));
 		setListData([]);
 	}
