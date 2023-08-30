@@ -112,7 +112,7 @@ export default function FilterBar({
 		});
 	}
 
-	const BACKEND_SEARCH_ENDPOINT = () => {
+	const backendSearchEndpoint = () => {
 		if (process.env.NODE_ENV === "development") {
 			console.log("Dev environment");
 			return "http://localhost:5000/searches";
@@ -126,7 +126,7 @@ export default function FilterBar({
 		e.preventDefault();
 		console.log("post to backend triggered");
 		axios
-			.post(BACKEND_SEARCH_ENDPOINT, {
+			.post(backendSearchEndpoint(), {
 				name: listName,
 				all_other_filters: allOtherFilters,
 				companies: companies,
