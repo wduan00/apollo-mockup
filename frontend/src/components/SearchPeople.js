@@ -64,6 +64,10 @@ export default function SearchPeople() {
 					setCurrentPage={setCurrentPage}
 				></FilterBar>
 				<div className="table-responsive col-lg-10 col-xs-12">
+					<div>
+						Results {1 + (data.pagination.page - 1) * 10} -{" "}
+						{data.pagination.page * 10} of {data.pagination.total_entries}
+					</div>
 					<table className="table table-striped">
 						<thead className="table-light">
 							<tr>
